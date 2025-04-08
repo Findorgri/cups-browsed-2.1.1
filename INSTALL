@@ -1,0 +1,114 @@
+INSTALL - OpenPrinting cups-browsed v2.1.1 - 2025-01-08
+-------------------------------------------------------
+
+This file describes how to compile and install OpenPrinting
+cups-browsed from source code. For more information on cups-browsed
+see the file called "README.md". A complete change log can be found
+in "CHANGES.md".
+
+BEFORE YOU BEGIN
+
+    You'll need ANSI-compliant C, plus a make program and POSIX-compliant
+    shell (/bin/sh).  The GNU compiler tools and Bash work well and we have tested
+    the current CUPS code against several versions of GCC with excellent results.
+
+    The Makefiles used by the project should work with most versions of make.
+    We've tested them with GNU make as well as the make programs shipped by
+    Compaq, HP, SGI, and Sun.  BSD users should use GNU make (gmake) since BSD
+    make does not support "include".
+
+    libcups (of CUPS 2.2.2 or newer), libcupsfilters 2.x, libppd,
+    libavahi-common, libavahi-client, libdbus, and glib must be
+    installed to be able to compile this package.
+
+COMPILING THE GIT REPOSITORY CODE
+
+    The cups-browsed GIT repository doesn't hold a copy of the pre-built
+    configure script.  You'll need to run the GNU autoconf software (2.65 or
+    higher) to create it:
+
+        ./autogen.sh
+
+
+CONFIGURATION
+
+    cups-browsed uses GNU autoconf, so you should find the usual
+    "configure" script in the main cups-browsed source directory.  To
+    configure cups-browsed for your system, type:
+
+	./configure
+
+    The default installation will put the cups-browsed software in the
+    "/etc" and "/usr" directories on your system.
+
+    Use the "--prefix" option to install the cups-browsed software in another
+    location:
+
+	./configure --prefix=/some/directory
+
+    To see a complete list of configuration options, use the --help option:
+
+        ./configure --help
+
+    If any of the dependent libraries are not installed in a system default
+    location (typically "/usr/include" and "/usr/lib") you'll need to set the
+    CFLAGS, CPPFLAGS, CXXFLAGS, DSOFLAGS, and LDFLAGS environment variables
+    prior to running configure:
+
+	setenv CFLAGS "-I/some/directory"
+	setenv CPPFLAGS "-I/some/directory"
+	setenv CXXFLAGS "-I/some/directory"
+	setenv DSOFLAGS "-L/some/directory"
+	setenv LDFLAGS "-L/some/directory"
+	./configure ...
+
+    or:
+
+	CFLAGS="-I/some/directory" \
+	CPPFLAGS="-I/some/directory" \
+	CXXFLAGS="-I/some/directory" \
+	DSOFLAGS="-L/some/directory" \
+	LDFLAGS="-L/some/directory" \
+	./configure ...
+
+    Once you have configured things, just type:
+
+	make ENTER
+
+    or if you have FreeBSD, NetBSD, or OpenBSD type:
+
+	gmake ENTER
+
+    to build the software.
+
+
+INSTALLING THE SOFTWARE
+
+    Once you have built the software you need to install it.  The "install"
+    target provides a quick way to install the software on your local system:
+
+	make install ENTER
+
+    or for FreeBSD, NetBSD, or OpenBSD:
+
+	gmake install ENTER
+
+PACKAGING THE SOFTWARE FOR OPERATING SYSTEM DISTRIBUTIONS
+
+    cups-browsed is mainly needed and actually used to auto-create
+    local print queues for auto-discovered IPP print services (remote
+    CUPS printers, IPP network printers, IPP-over-USB printers,
+    Printer Applications) so that they also get listed by print
+    dialogs which do not support CUPS' concept of auto-creating
+    temporary print queues on-demand for these services.
+
+    So OS distribution maintainers should check the print dialogs
+    (GTK, Qt, application-specific) whether they list all printers,
+    including above-mentioned IPP services without running
+    cups-browsed and without manual creation of local print
+    queues. only if printers are missing, cups-browsed is needed. It
+    should be built with the `./configure` option
+    `--enable-auto-setup-driverless-only` then.
+
+    Otherwise cups-browsed is only needed for more advanced setups,
+    like printer clusters.
