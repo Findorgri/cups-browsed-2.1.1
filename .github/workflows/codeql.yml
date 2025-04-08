@@ -43,6 +43,7 @@ jobs:
           gawk \
           libavahi-client-dev \
           libavahi-common-dev \
+          libavahi-glib-dev \
           libcups2-dev \
           libcupsfilters-dev \
           libppd-dev \
